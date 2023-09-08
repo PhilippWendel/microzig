@@ -103,12 +103,12 @@ fn make_isr_handler(comptime name: []const u8, comptime func: anytype) type {
 
 pub const startup_logic = struct {
     export fn microzig_unhandled_vector() callconv(.Naked) noreturn {
-        @panic("Unhandled interrupt");
+        // @panic("Unhandled interrupt");
     }
 
     extern fn microzig_main() noreturn;
 
-    export fn microzig_start() callconv(.Naked) noreturn {
+    export fn microzig_start() noreturn {
         // At startup the stack pointer is at the end of RAM
         // so, no need to set it manually!
 
@@ -118,7 +118,7 @@ pub const startup_logic = struct {
         microzig_main();
     }
 
-    fn copy_data_to_ram() void {
+    inline fn copy_data_to_ram() void {
         asm volatile (
             \\  ; load Z register with the address of the data in flash
             \\  ldi r30, lo8(microzig_data_load_start)
@@ -143,7 +143,7 @@ pub const startup_logic = struct {
         // Probably a good idea to add clobbers here, but compiler doesn't seem to care
     }
 
-    fn clear_bss() void {
+    inline fn clear_bss() void {
         asm volatile (
             \\  ; load X register with the beginning of bss section
             \\  ldi r26, lo8(microzig_bss_start)
