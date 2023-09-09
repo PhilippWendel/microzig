@@ -1,8 +1,8 @@
 const std = @import("std");
 const hal = @import("hal");
 const app = struct {}; // workaround for error: no package named 'app' available within package 'root.microzig'
-const board = @import("Board");
-const cpu = @import("Cpu");
+const board = @import("board");
+const cpu = @import("cpu");
 const config = @import("config");
 
 /// An enumeration of clock sources.
